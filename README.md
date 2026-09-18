@@ -58,9 +58,11 @@
 
 ```text
 Codex-Switcher/
+├── .gitignore                         # Git 忽略設定
 ├── README.md                          # 本檔案
 ├── CONTRIBUTING.md                    # 貢獻指南
 ├── CHANGELOG.md                       # 版本變更紀錄
+├── RELEASE_CHECKLIST.md               # 發布檢查清單
 ├── LICENSE                            # MIT 開源授權
 ├── install.sh                         # 快速安裝腳本 (macOS/Linux)
 ├── bin/
@@ -74,9 +76,9 @@ Codex-Switcher/
     │   ├── release.yml                # 自動發布 Release
     │   └── test.yml                   # 腳本測試 CI
     ├── ISSUE_TEMPLATE/
-    │   ├── bug_report.md
-    │   └── feature_request.md
-    └── pull_request_template.md
+    │   ├── bug_report.md              # Bug 回報模板
+    │   └── feature_request.md         # 功能請求模板
+    └── pull_request_template.md       # Pull Request 模板
 ```
 
 ---
