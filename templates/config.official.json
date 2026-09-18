@@ -1,0 +1,13 @@
+{
+  "apiType": "openai",
+  "baseUrl": "https://api.openai.com/v1",
+  "models": [
+    "gpt-4o",
+    "gpt-4o-mini",
+    "o1-preview",
+    "o1-mini"
+  ],
+  "defaultModel": "gpt-4o",
+  "temperature": 0.7,
+  "maxTokens": 4096
+}

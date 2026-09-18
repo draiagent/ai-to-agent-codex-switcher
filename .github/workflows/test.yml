@@ -1,0 +1,77 @@
+name: Test Scripts
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-bash:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test bash script syntax
+        run: |
+          bash -n bin/codex-switch
+
+      - name: Make script executable
+        run: chmod +x bin/codex-switch
+
+      - name: Test help output
+        run: ./bin/codex-switch help || true
+
+      - name: Test status (expect config not found)
+        run: ./bin/codex-switch status || true
+
+  test-powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test PowerShell script syntax
+        shell: powershell
+        run: |
+          $content = Get-Content "bin\codex-switch.ps1" -Raw
+          $tokens = [System.Management.Automation.PSParser]::Tokenize($content, [ref]$null)
+          if ($tokens | Where-Object { $_.Type -eq 'ParseError' }) {
+              Write-Error "PowerShell syntax error found"
+              exit 1
+          }
+
+      - name: Test help output
+        shell: powershell
+        run: |
+          .\bin\codex-switch.ps1 -Mode unknown -ErrorAction SilentlyContinue || $true
+
+      - name: Test status (expect config not found)
+        shell: powershell
+        run: .\bin\codex-switch.ps1 -Mode status
+
+  validate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON config files
+        run: |
+          for file in templates/*.json; do
+            echo "Validating $file..."
+            python3 -m json.tool "$file" > /dev/null && echo "✓ Valid" || (echo "✗ Invalid JSON" && exit 1)
+          done
+
+  lint-markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate markdown files
+        run: |
+          for file in *.md; do
+            echo "Checking $file..."
+            [ -s "$file" ] && echo "✓ $file exists and not empty" || (echo "✗ $file is empty or missing" && exit 1)
+          done

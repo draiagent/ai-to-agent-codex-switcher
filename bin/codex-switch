@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -e
+
+CONFIG_DIR="${HOME}/.codex"
+TARGET_CONFIG="${CONFIG_DIR}/config.json"
+OFFICIAL_SRC="${CONFIG_DIR}/config.official.json"
+GEMINI_SRC="${CONFIG_DIR}/config.gemini.json"
+
+show_usage() {
+    echo "======================================"
+    echo "       Codex Switcher (Bash)          "
+    echo "======================================"
+    echo "用法: codex-switch [official | gemini | status]"
+    echo ""
+    echo "  official : 切換為官方 OpenAI 端點設定"
+    echo "  gemini   : 切換為本地反代 (Gemini / Antigravity) 設定"
+    echo "  status   : 檢查目前作用中的設定檔"
+    echo "======================================"
+    exit 1
+}
+
+case "$1" in
+    official)
+        if [ ! -f "$OFFICIAL_SRC" ]; then
+            echo "[錯誤] 找不到官方設定檔: $OFFICIAL_SRC"
+            echo "請先將範本複製至該路徑。"
+            exit 1
+        fi
+        cp -f "$OFFICIAL_SRC" "$TARGET_CONFIG"
+        echo "[✓] 已成功套用【官方 OpenAI 模式】"
+        echo "提示: 請完全重啟 Codex 客戶端以載入原生設定。"
+        ;;
+    gemini)
+        if [ ! -f "$GEMINI_SRC" ]; then
+            echo "[錯誤] 找不到 Gemini 設定檔: $GEMINI_SRC"
+            echo "請先將範本複製至該路徑並確認本地反代運作正常。"
+            exit 1
+        fi
+        cp -f "$GEMINI_SRC" "$TARGET_CONFIG"
+        echo "[✓] 已成功套用【Gemini / 反向代理模式】"
+        echo "提示: 請確認本地反代服務已啟動，並完全重啟 Codex 客戶端。"
+        ;;
+    status)
+        if [ ! -f "$TARGET_CONFIG" ]; then
+            echo "[狀態] 未偵測到使用中的 config.json ($TARGET_CONFIG)"
+        else
+            echo "[狀態] 目前使用中的設定檔: $TARGET_CONFIG"
+            echo "--- 前 10 行內容預覽 ---"
+            head -n 10 "$TARGET_CONFIG"
+        fi
+        ;;
+    *)
+        show_usage
+        ;;
+esac

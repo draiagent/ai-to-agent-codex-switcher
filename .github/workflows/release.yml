@@ -1,0 +1,96 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # 例如 v1.0.0, v1.2.3
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG=${{ github.ref }}
+          VERSION=${TAG#refs/tags/}
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Create Release Assets
+        run: |
+          # 建立臨時目錄
+          mkdir -p release-assets/codex-switcher-${{ steps.version.outputs.version }}
+
+          # 複製所有必要檔案
+          cp -r bin templates README.md LICENSE CONTRIBUTING.md CHANGELOG.md install.sh \
+            release-assets/codex-switcher-${{ steps.version.outputs.version }}/
+
+          # 壓縮為 tar.gz (macOS/Linux)
+          cd release-assets
+          tar -czf codex-switcher-${{ steps.version.outputs.version }}-macos-linux.tar.gz \
+            codex-switcher-${{ steps.version.outputs.version }}
+
+          # 壓縮為 zip (Windows 友善)
+          zip -r codex-switcher-${{ steps.version.outputs.version }}-windows.zip \
+            codex-switcher-${{ steps.version.outputs.version }}
+
+          # 顯示建立的檔案
+          ls -lh *.tar.gz *.zip
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.version.outputs.version }}
+          body: |
+            # Codex-Switcher ${{ steps.version.outputs.version }}
+
+            詳細變更請參考 [CHANGELOG.md](./CHANGELOG.md)
+
+            ## 安裝方式
+
+            ### macOS / Linux
+            ```bash
+            tar xzf codex-switcher-${{ steps.version.outputs.version }}-macos-linux.tar.gz
+            cd codex-switcher-${{ steps.version.outputs.version }}
+            bash install.sh
+            ```
+
+            ### Windows
+            ```powershell
+            # 解壓 codex-switcher-${{ steps.version.outputs.version }}-windows.zip
+            # 執行: .\bin\codex-switch.ps1 official
+            ```
+
+            更多資訊請參考 [README.md](./README.md)
+          draft: false
+          prerelease: false
+
+      - name: Upload macOS/Linux Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release-assets/codex-switcher-${{ steps.version.outputs.version }}-macos-linux.tar.gz
+          asset_name: codex-switcher-${{ steps.version.outputs.version }}-macos-linux.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Windows Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release-assets/codex-switcher-${{ steps.version.outputs.version }}-windows.zip
+          asset_name: codex-switcher-${{ steps.version.outputs.version }}-windows.zip
+          asset_content_type: application/zip

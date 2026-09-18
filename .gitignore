@@ -1,0 +1,38 @@
+# === Codex Local Config (Do not commit) ===
+~/.codex/
+.codex/
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# === IDE & Editor ===
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.vim/
+
+# === Credentials & Secrets ===
+*.key
+*.pem
+.env
+.env.local
+.env.*.local
+credentials.json
+access_token*
+
+# === Temp & Build ===
+*.log
+*.tmp
+dist/
+build/
+node_modules/
+*.pyc
+__pycache__/
+
+# === Git ===
+.git/

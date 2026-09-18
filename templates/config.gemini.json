@@ -1,0 +1,14 @@
+{
+  "apiType": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:8080/v1",
+  "apiKey": "local-proxy-token",
+  "models": [
+    "gemini-1.5-pro",
+    "gemini-1.5-flash",
+    "gemini-2.0-flash-exp",
+    "claude-3-5-sonnet"
+  ],
+  "defaultModel": "gemini-1.5-pro",
+  "temperature": 0.7,
+  "maxTokens": 8192
+}
