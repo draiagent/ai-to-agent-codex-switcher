@@ -1,7 +1,7 @@
 # Codex-Switcher
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![GitHub Release](https://img.shields.io/github/v/release/draiagent/Codex-Switcher?logo=github)
+![GitHub Release](https://img.shields.io/github/v/release/draiagent/ai-to-agent-codex-switcher?logo=github)
 
 輕量級的 **Codex AI Agent 編程輔助工具**模型設定快速切換工具。支援在 **OpenAI 官方端點**與**自訂本地反向代理**（如 Gemini / Antigravity 外接模型）之間秒速切換，讓你彈性運用不同的 AI 模型服務商，優化成本與算力配置。
 
@@ -50,6 +50,10 @@
 
 ---
 
+**🔗 GitHub 倉庫**: [draiagent/ai-to-agent-codex-switcher](https://github.com/draiagent/ai-to-agent-codex-switcher)
+
+---
+
 ## 📁 專案結構
 
 ```text
@@ -84,8 +88,8 @@ Codex-Switcher/
 **macOS / Linux:**
 ```bash
 # 複製整個專案
-git clone https://github.com/draiagent/Codex-Switcher.git
-cd Codex-Switcher
+git clone https://github.com/draiagent/ai-to-agent-codex-switcher.git
+cd ai-to-agent-codex-switcher
 
 # 執行安裝腳本
 bash install.sh
@@ -97,8 +101,8 @@ nano ~/.codex/config.gemini.json
 **Windows (PowerShell):**
 ```powershell
 # 複製專案並進入目錄
-git clone https://github.com/draiagent/Codex-Switcher.git
-cd Codex-Switcher
+git clone https://github.com/draiagent/ai-to-agent-codex-switcher.git
+cd ai-to-agent-codex-switcher
 
 # 手動複製配置檔
 New-Item -ItemType Directory -Force -Path "$HOME\.codex"
@@ -265,8 +269,8 @@ alias codex-claudeflare="cp ~/.codex/config.claudeflare.json ~/.codex/config.jso
 ### 開發者快速開始
 ```bash
 # Fork 並 Clone 本專案
-git clone https://github.com/YOUR-USERNAME/Codex-Switcher.git
-cd Codex-Switcher
+git clone https://github.com/YOUR-USERNAME/ai-to-agent-codex-switcher.git
+cd ai-to-agent-codex-switcher
 
 # 建立功能分支
 git checkout -b feature/your-feature
